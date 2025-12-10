@@ -1,9 +1,9 @@
+import {InteriorScene} from "./InteriorScene.tsx";
+
 function App() {
   //
   return (
-    <>
-      <p>Hello World</p>
-    </>
+    <InteriorScene />
   )
 }
 

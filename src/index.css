@@ -1,0 +1,53 @@
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+html, body, #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobile-app {
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
+
+.canvas-area {
+    flex: 8;
+    width: 100%;
+    background-color: #202020;
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.sidebar-area {
+    flex: 2;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+canvas {
+    touch-action: none;
+}
