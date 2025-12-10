@@ -1,6 +1,7 @@
 import {useMemo} from "react";
 import {Center, OrbitControls, PerspectiveCamera, View} from "@react-three/drei";
 import type {AssetConfig} from "./types.tsx";
+import {GltfMaterial} from "./GltfMaterial.tsx";
 
 export const AssetPalette3DView = ({ item, trackRef }: { item: AssetConfig, trackRef: HTMLDivElement }) => {
   //
@@ -8,6 +9,8 @@ export const AssetPalette3DView = ({ item, trackRef }: { item: AssetConfig, trac
 
   const maxDim = Math.max(...item.dimension);
   const scaleFactor = 2.5 / maxDim;
+
+  const commonScale = [scaleFactor, scaleFactor, scaleFactor] as [number, number, number];
 
   return (
     <View track={stableTrackRef as any}>
@@ -17,10 +20,16 @@ export const AssetPalette3DView = ({ item, trackRef }: { item: AssetConfig, trac
 
       <group position={[0, 0.8, 0]}>
         <Center>
-          <mesh scale={[scaleFactor, scaleFactor, scaleFactor]}>
-            <boxGeometry args={[item.dimension[0], item.dimension[1], item.dimension[2]]} />
-            <meshStandardMaterial color={item.color} />
-          </mesh>
+          {item.url ? (
+            <group scale={commonScale}>
+              <GltfMaterial url={item.url} dimension={item.dimension} />
+            </group>
+          ) : (
+            <mesh scale={commonScale}>
+              <boxGeometry args={[item.dimension[0], item.dimension[1], item.dimension[2]]} />
+              <meshStandardMaterial color={item.color} />
+            </mesh>
+          )}
         </Center>
       </group>
 

@@ -4,9 +4,10 @@ export type AssetConfig = {
   label: string;
   dimension: number[];
   color: string;
+  url?: string;
 }
 
-export type PlacedAsset = {
+export type AssetInstance = {
   id: string;
   config: AssetConfig;
   position: Vector3;
@@ -18,5 +19,3 @@ export const ColliderTag = {
   FLOOR: 1,
   ASSET: 2,
 } as const;
-
-export type ColliderTagType = typeof ColliderTag[keyof typeof ColliderTag];
