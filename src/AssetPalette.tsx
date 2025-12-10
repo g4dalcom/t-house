@@ -1,20 +1,30 @@
-import {useState} from 'react';
+import {useState, type Dispatch, type SetStateAction} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {AssetPalette3DView} from "./AssetPalette3DView.tsx";
-import type {AssetConfig} from "./types.tsx";
+import type {AssetConfig, AssetInstance} from "./types.tsx";
+import {Vector3} from "three";
 
 interface Props {
   assets: AssetConfig[];
-  onClickAsset: (item: AssetConfig) => void;
+  setPendingAsset: Dispatch<SetStateAction<AssetInstance | null>>;
 }
 
-export const AssetPalette = ({ assets, onClickAsset }: Props) => {
+export const AssetPalette = ({ assets, setPendingAsset }: Props) => {
   //
   const [refs, setRefs] = useState<Record<string, HTMLDivElement | null>>({});
 
+  const handleClickAsset = (item: AssetConfig) => {
+    const selectedAsset: AssetInstance = {
+      id: null,
+      config: item,
+      position: new Vector3(0, 0, 0),
+      rotation: new Vector3(0, 0, 0)
+    };
+    setPendingAsset(selectedAsset);
+  }
+
   return (
     <div className="sidebar-area" style={{ position: 'relative' }}>
-
       <div
         style={{
           display: 'flex',
@@ -26,7 +36,7 @@ export const AssetPalette = ({ assets, onClickAsset }: Props) => {
           zIndex: 10
         }}
       >
-        {assets.map((item) => (
+        { assets.map((item) => (
           <div
             key={item.label}
             ref={(el) => {
@@ -34,7 +44,7 @@ export const AssetPalette = ({ assets, onClickAsset }: Props) => {
                 setRefs((prev) => ({ ...prev, [item.label]: el }));
               }
             }}
-            onPointerDown={() => onClickAsset(item)}
+            onPointerDown={() => handleClickAsset(item)}
             style={{
               height: '80px',
               aspectRatio: '1/1',
@@ -57,7 +67,7 @@ export const AssetPalette = ({ assets, onClickAsset }: Props) => {
               {item.label}
             </span>
           </div>
-        ))}
+        )) }
       </div>
 
       <Canvas
@@ -74,7 +84,7 @@ export const AssetPalette = ({ assets, onClickAsset }: Props) => {
         }}
       >
 
-        {assets.map((item) => {
+        { assets.map((item) => {
           const trackRef = refs[item.label];
           if (!trackRef) return null;
 
@@ -85,7 +95,7 @@ export const AssetPalette = ({ assets, onClickAsset }: Props) => {
               trackRef={trackRef}
             />
           );
-        })}
+        }) }
       </Canvas>
     </div>
   );

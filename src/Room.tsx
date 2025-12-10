@@ -1,11 +1,11 @@
 import {DoubleSide, Vector3} from "three";
 import {useState} from "react";
 import {Asset} from "./Asset.tsx";
-import {type AssetConfig, ColliderTag, type AssetInstance} from "./types.tsx";
+import {type AssetInstance, ColliderTag} from "./types.tsx";
 import {GltfMaterial} from "./GltfMaterial.tsx";
 
 interface Props {
-  pendingAsset: AssetConfig | null;
+  pendingAsset: AssetInstance | null;
   placedAssets: AssetInstance[];
   selectedId: string | null;
   onPlace: (position: Vector3) => void;
@@ -24,7 +24,7 @@ export const Room = ({ pendingAsset, placedAssets, selectedId, onPlace, onSelect
   const handlePointerMove = (e: any) => {
     if (!pendingAsset) return;
 
-    const [width, height, depth] = pendingAsset.dimension;
+    const [width, height, depth] = pendingAsset.config.dimension;
     const { x, z } = e.point;
     const y = height / 2;
 
@@ -33,7 +33,7 @@ export const Room = ({ pendingAsset, placedAssets, selectedId, onPlace, onSelect
     const limitZ = (ROOM_SIZE / 2) - (depth / 2);
     const clampedX = Math.max(-limitX, Math.min(limitX, x));
     const clampedZ = Math.max(-limitZ, Math.min(limitZ, z));
-    console.log("pendingAsset = ", pendingAsset)
+
     setGhostPos(new Vector3(clampedX, y, clampedZ));
   };
 
@@ -85,10 +85,10 @@ export const Room = ({ pendingAsset, placedAssets, selectedId, onPlace, onSelect
       </mesh>
 
       {/* === 배치된 물체들 === */}
-      {placedAssets.map((obj) => (
+      { placedAssets.map((obj) => (
         <Asset
           key={obj.id}
-          id={obj.id}
+          id={obj.id!}
           config={obj.config}
           position={obj.position}
           rotation={obj.rotation}
@@ -100,22 +100,22 @@ export const Room = ({ pendingAsset, placedAssets, selectedId, onPlace, onSelect
           }}
           onTransformEnd={onUpdateObj}
         />
-      ))}
+      )) }
 
       {/* === 배치 중인 물체 === */}
-      {pendingAsset && ghostPos && (
+      { pendingAsset && ghostPos && (
         <group position={ghostPos}>
           <mesh position={[0, 0, 0]}>
-            { pendingAsset.url ?
-              <GltfMaterial url={pendingAsset.url} dimension={pendingAsset.dimension} /> :
+            { pendingAsset.config.url ?
+              <GltfMaterial url={pendingAsset.config.url} dimension={pendingAsset.config.dimension} /> :
               <>
-                <boxGeometry args={[pendingAsset.dimension[0], pendingAsset.dimension[1], pendingAsset.dimension[2]]} />
-                <meshStandardMaterial color={pendingAsset.color} transparent={true} opacity={0.6} />
+                <boxGeometry args={[pendingAsset.config.dimension[0], pendingAsset.config.dimension[1], pendingAsset.config.dimension[2]]} />
+                <meshStandardMaterial color={pendingAsset.config.color} transparent={true} opacity={0.6} />
               </>
             }
           </mesh>
         </group>
-      )}
+      ) }
     </group>
   );
 };

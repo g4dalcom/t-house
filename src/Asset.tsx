@@ -192,8 +192,6 @@ export const Asset = ({ id, config, position, rotation, isSelected, isEditMode, 
           ref={meshRef}
           position={position}
           rotation={[rotation.x, rotation.y, rotation.z]}
-          castShadow={!config.url}
-          receiveShadow={!config.url}
           onClick={onSelect}
           userData={{ tag: ColliderTag.ASSET, id: id }}
         >

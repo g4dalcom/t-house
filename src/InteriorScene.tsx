@@ -11,12 +11,14 @@ export const InteriorScene = () => {
   //
   const assets: AssetConfig[] = [
     { label: 'Desk', dimension: [3, 2, 4], color: '#187cb6', url: '/desk.glb' },
-    { label: 'Monitor', dimension: [2, 2, 2], color: '#228c27' },
-    { label: 'Closet', dimension: [2, 4, 2], color: '#bd4685' },
+    { label: 'Clock', dimension: [1, 1, 0.5], color: '#228c27', url: '/clock.glb' },
+    { label: 'Plant', dimension: [1, 1, 1], color: '#58bbce', url: '/plant.glb' },
+    { label: 'Shelves', dimension: [3, 4, 1], color: '#4cea92', url: '/shelves.glb' },
+    { label: 'Table', dimension: [2, 2, 3], color: '#9577c7', url: '/table.glb' },
   ]
 
   const [placedAssets, setPlacedAssets] = useState<AssetInstance[]>([]);
-  const [pendingAsset, setPendingAsset] = useState<AssetConfig | null>(null);
+  const [pendingAsset, setPendingAsset] = useState<AssetInstance | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,15 +34,8 @@ export const InteriorScene = () => {
 
   const handlePlace = (position: Vector3) => {
     if (pendingAsset) {
-      setPlacedAssets(prev => [
-        ...prev,
-        {
-          id: uuidv4(),
-          config: pendingAsset,
-          position,
-          rotation: new Vector3(0, 0, 0)
-        }
-      ]);
+      const newAsset = { ...pendingAsset, id: uuidv4(), position };
+      setPlacedAssets(prev => [...prev, newAsset]);
       setPendingAsset(null);
     }
   };
@@ -86,7 +81,7 @@ export const InteriorScene = () => {
 
       <AssetPalette
         assets={assets}
-        onClickAsset={setPendingAsset}
+        setPendingAsset={setPendingAsset}
       />
     </div>
   );

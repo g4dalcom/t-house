@@ -41,7 +41,7 @@ export const GltfMaterial = ({ url, dimension }: Props) => {
 
   return (
     <group ref={groupRef}>
-      <Center top>
+      <Center>
         <primitive
           object={clone}
           scale={scale}

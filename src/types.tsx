@@ -8,7 +8,7 @@ export type AssetConfig = {
 }
 
 export type AssetInstance = {
-  id: string;
+  id: string | null;
   config: AssetConfig;
   position: Vector3;
   rotation: Vector3;
