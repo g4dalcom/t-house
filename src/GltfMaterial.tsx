@@ -9,7 +9,8 @@ interface Props {
 
 export const GltfMaterial = ({ url, dimension }: Props) => {
   //
-  const { scene } = useGLTF(url);
+  const imageUrl = `./models/${url}.glb`;
+  const { scene } = useGLTF(imageUrl);
   const groupRef = useRef<Group>(null);
 
   const { clone, scale } = useMemo(() => {

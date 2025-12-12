@@ -196,7 +196,7 @@ export const Asset = ({ id, config, position, rotation, isSelected, isEditMode, 
           userData={{ tag: ColliderTag.ASSET, id: id }}
         >
           <boxGeometry args={[width, height, depth]} />
-          {config.url ? (
+          {config.image ? (
             <>
               <meshStandardMaterial
                 transparent={!isEditMode}
@@ -206,7 +206,7 @@ export const Asset = ({ id, config, position, rotation, isSelected, isEditMode, 
                 wireframe={isEditMode}
               />
 
-              <GltfMaterial url={config.url} dimension={[width, height, depth]} />
+              <GltfMaterial url={config.image} dimension={[width, height, depth]} />
             </>
           ) : (
             <meshStandardMaterial

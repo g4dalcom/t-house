@@ -1,63 +1,26 @@
 import {DoubleSide, Vector3} from "three";
-import {useState} from "react";
+import {memo} from "react";
 import {Asset} from "./Asset.tsx";
 import {type AssetInstance, ColliderTag} from "./types.tsx";
-import {GltfMaterial} from "./GltfMaterial.tsx";
 
 interface Props {
-  pendingAsset: AssetInstance | null;
   placedAssets: AssetInstance[];
   selectedId: string | null;
-  onPlace: (position: Vector3) => void;
   onSelectObj: (id: string | null) => void;
   onUpdateObj: (id: string, position: Vector3, rotation: Vector3) => void;
 }
 
-export const Room = ({ pendingAsset, placedAssets, selectedId, onPlace, onSelectObj, onUpdateObj }: Props) => {
+export const Room = memo(({ placedAssets, selectedId, onSelectObj, onUpdateObj }: Props) => {
   //
   const ROOM_SIZE = 10;
   const WALL_HEIGHT = 4;
-
-  const [ghostPos, setGhostPos] = useState<Vector3 | null>(null);
-
-  // 마우스 이동 (배치 모드일 때만 좌표 계산)
-  const handlePointerMove = (e: any) => {
-    if (!pendingAsset) return;
-
-    const [width, height, depth] = pendingAsset.config.dimension;
-    const { x, z } = e.point;
-    const y = height / 2;
-
-    // 벽 뚫기 방지 (Clamp)
-    const limitX = (ROOM_SIZE / 2) - (width / 2);
-    const limitZ = (ROOM_SIZE / 2) - (depth / 2);
-    const clampedX = Math.max(-limitX, Math.min(limitX, x));
-    const clampedZ = Math.max(-limitZ, Math.min(limitZ, z));
-
-    setGhostPos(new Vector3(clampedX, y, clampedZ));
-  };
-
-  // 바닥 클릭
-  const handlePointerUp = (e: any) => {
-    // A. 배치 모드: 설치 확정
-    if (pendingAsset && ghostPos) {
-      e.stopPropagation();
-      onPlace(ghostPos);
-    }
-    // B. 일반 모드: 빈 바닥을 찍었으므로 선택 해제 (기즈모 끄기)
-    else {
-      onSelectObj(null);
-    }
-  };
-
+  console.log("room rendering")
   return (
     <group>
       {/* 바닥 */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         receiveShadow={true}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
         userData={{ tag: ColliderTag.FLOOR }}
       >
         <planeGeometry args={[ROOM_SIZE, ROOM_SIZE]} />
@@ -101,21 +64,6 @@ export const Room = ({ pendingAsset, placedAssets, selectedId, onPlace, onSelect
           onTransformEnd={onUpdateObj}
         />
       )) }
-
-      {/* === 배치 중인 물체 === */}
-      { pendingAsset && ghostPos && (
-        <group position={ghostPos}>
-          <mesh position={[0, 0, 0]}>
-            { pendingAsset.config.url ?
-              <GltfMaterial url={pendingAsset.config.url} dimension={pendingAsset.config.dimension} /> :
-              <>
-                <boxGeometry args={[pendingAsset.config.dimension[0], pendingAsset.config.dimension[1], pendingAsset.config.dimension[2]]} />
-                <meshStandardMaterial color={pendingAsset.config.color} transparent={true} opacity={0.6} />
-              </>
-            }
-          </mesh>
-        </group>
-      ) }
     </group>
   );
-};
+});

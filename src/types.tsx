@@ -4,7 +4,7 @@ export type AssetConfig = {
   label: string;
   dimension: number[];
   color: string;
-  url?: string;
+  image?: string;
 }
 
 export type AssetInstance = {
