@@ -5,6 +5,7 @@ import {type ThreeEvent, useThree} from "@react-three/fiber";
 import {OBB} from "three-stdlib";
 import {type AssetConfig, ColliderTag} from "./types.tsx";
 import {GltfMaterial} from "./GltfMaterial.tsx";
+import {DeleteButton} from "./DeleteButton.tsx";
 
 interface Props {
   id: string;
@@ -15,9 +16,10 @@ interface Props {
   isEditMode: boolean;
   onSelect: (e: ThreeEvent<MouseEvent>) => void;
   onTransformEnd: (id: string, position: Vector3, rotation: Vector3) => void;
+  onDelete: (id: string) => void;
 }
 
-export const Asset = ({ id, config, position, rotation, isSelected, isEditMode, onSelect, onTransformEnd }: Props) => {
+export const Asset = ({ id, config, position, rotation, isSelected, isEditMode, onSelect, onTransformEnd, onDelete }: Props) => {
   //
   const { scene } = useThree();
   const [width, height, depth] = config.dimension;
@@ -213,6 +215,13 @@ export const Asset = ({ id, config, position, rotation, isSelected, isEditMode, 
               color={config.color}
               emissive={isSelected ? '#444' : 'black'}
               wireframe={isEditMode}
+            />
+          )}
+
+          {isSelected && (
+            <DeleteButton
+              position={[width / 2 + 0.2, height / 2 + 0.2, depth / 2 + 0.2]}
+              onClick={() => onDelete(id)}
             />
           )}
         </mesh>

@@ -49,6 +49,11 @@ export const InteriorScene = () => {
     ));
   }, []);
 
+  const handleDeleteAsset = useCallback((id: string) => {
+    setPlacedAssets((prev) => prev.filter((asset) => asset.id !== id));
+    setSelectedId(null);
+  }, []);
+
   return (
     <div className="mobile-app" style={{ position: 'relative', width: '100vw', height: '100vh' }}>
       <div className="canvas-area" style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
@@ -66,6 +71,7 @@ export const InteriorScene = () => {
             selectedId={selectedId}
             onSelectObj={setSelectedId}
             onUpdateObj={handleUpdateTransform}
+            handleDeleteAsset={handleDeleteAsset}
           />
 
           {/* ==== 배치 중인 물체 ==== */}

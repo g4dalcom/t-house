@@ -8,13 +8,14 @@ interface Props {
   selectedId: string | null;
   onSelectObj: (id: string | null) => void;
   onUpdateObj: (id: string, position: Vector3, rotation: Vector3) => void;
+  handleDeleteAsset: (id: string) => void;
 }
 
-export const Room = memo(({ placedAssets, selectedId, onSelectObj, onUpdateObj }: Props) => {
+export const Room = memo(({ placedAssets, selectedId, onSelectObj, onUpdateObj, handleDeleteAsset }: Props) => {
   //
   const ROOM_SIZE = 10;
   const WALL_HEIGHT = 4;
-  console.log("room rendering")
+
   return (
     <group>
       {/* 바닥 */}
@@ -62,6 +63,7 @@ export const Room = memo(({ placedAssets, selectedId, onSelectObj, onUpdateObj }
             onSelectObj(obj.id);
           }}
           onTransformEnd={onUpdateObj}
+          onDelete={handleDeleteAsset}
         />
       )) }
     </group>
